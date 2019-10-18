@@ -15,7 +15,7 @@ $ git clone https://github.com/informatica-werktuigen/oefenzitting-javascript.gi
 ## Structuur repository
 
 - ./hoorcollege: in deze folder kan je de verschillende codevoorbeelden uit de les nakijken
-- ./sliding-puzzle: in deze folder plaats je je eigen oplossing voor deze oefenzitting
+- ./oplossing: in deze folder plaats je je eigen oplossing voor deze oefenzitting
 
 ## Editor
 
@@ -66,7 +66,7 @@ Voer nu onderstaande opdrachten uit met behulp van de Developer tools. Ververs i
 
 ## Deel 1: Lay-out maken
 
-Open in de folder *sliding-puzzle* in je repository het bestand met de naam *index.html*.
+Open in de folder *oplossing* in je repository het bestand met de naam *index.html*.
 Dit bestand bevat een algemeen skelet dat je kan gebruiken voor elke mogelijke html-pagina.
 
 ### Basisstructuur HTML
