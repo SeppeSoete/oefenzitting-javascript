@@ -9,6 +9,7 @@ let timer_html = "";
 window.onload = start_game;
 
 function start_game(){
+    my_time = 0;
     my_puzzle = generate_puzzle(puzzle_rows_total, puzzle_cols_total);
     draw_puzzle(my_puzzle);
     draw_timer(my_time);
@@ -65,12 +66,10 @@ function check_game_complete(puzzle){
 
 function swap_empty_square(puzzle, given_row, given_col){
     let done = false;
-    let rows = 3;
-    let cols = 3;
     let empty_row = 0;
     let empty_col = 0;
-    for(let row=0; (row < rows) && (done == false); row++){
-        for(let col = 0; (col < cols) && (done == false); col++){
+    for(let row=0; (row < puzzle_rows_total) && (done == false); row++){
+        for(let col = 0; (col < puzzle_cols_total) && (done == false); col++){
             if(puzzle[row][col] == 0){
                 done = true;
                 empty_row = row;
@@ -122,6 +121,7 @@ function square_click_handler(cell){
         if(check_game_complete(my_puzzle)){
             clearInterval(timer);
             alert(`Proficiat, uw tijd: ${timer_html}.`);
+            start_game()
         }
     }
 }
@@ -158,7 +158,6 @@ function change_puzzle_size(){
     puzzle_rows_total = rows;
     puzzle_cols_total = cols;
     clearInterval(timer);
-    my_time = 0;
     start_game();
 }
 
