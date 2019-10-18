@@ -7,7 +7,13 @@
         <link rel="stylesheet" type="text/css" href="stylesheet.css"> 
     </head>
     <body>
+        <h1 class="text_container">Seppe's sliding puzzle</h1>
         <div id="puzzle_container"></div>
-        <div id="timer_container"></div>
+        <div class="text_container" id="timer_container"></div>
+        <div class="text_container" id="input">
+             Amount of rows: <input type="text" id="rows"><br>
+             Amount of columns: <input type="text" id="cols"><br>
+             <button onclick='change_puzzle_size()'>Submit</button>
+        </div>
     </body>
 </html>
