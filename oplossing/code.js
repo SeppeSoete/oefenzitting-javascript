@@ -4,11 +4,14 @@ let puzzle_rows_total = 3;
 let puzzle_cols_total = 3;
 let my_puzzle = undefined;
 let timer_html = "";
+let timer = undefined;
 
 //Wanneer de volledige HTML-pagina geladen is wordt onderstaande functie uitgevoerd
 window.onload = start_game;
 
 function start_game(){
+    if(timer != undefined)
+        clearInterval(timer);
     my_time = 0;
     my_puzzle = generate_puzzle(puzzle_rows_total, puzzle_cols_total);
     draw_puzzle(my_puzzle);
@@ -28,7 +31,6 @@ function draw_timer(time){
 }
 
 function generate_puzzle_html(puzzle){
-    //TODO: Implementeer deze functie!
     //puzzle bevat een tweedimensionale lijst die de sliding puzzle voorstelt
     //Kijk naar de functie generate_board_html in voorbeeld 7 uit het hoorcollege voor inspiratie
     let html_string = "<table><tbody>";
@@ -38,10 +40,10 @@ function generate_puzzle_html(puzzle){
         html_string += "<tr>"
         for(let col = 0; col < cols; col++){
             let innervalue = puzzle[row][col]
-            let css_class = "my_class "
+            let css_class = "puzzle_square "
             if(innervalue == 0){
                 innervalue = "";
-                css_class = "my_class zero_square"
+                css_class = "puzzle_square zero_square"
             }
 
             html_string += `<td onclick="square_click_handler(this)" class=\"${css_class}\">${innervalue}</td>`
@@ -88,17 +90,24 @@ function swap_empty_square(puzzle, given_row, given_col){
 }
 
 function generate_puzzle(rows, cols){
-    let squares = rows * cols;
-    let squares_list = new Array(squares);
-    //Initialize the list with all needed values
-    for(let i = 0; i < squares; i++){
-        squares_list[i] = i;
-    }
-    //Shuffling the array 
-    //source: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-    for(let i = squares - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [squares_list[i], squares_list[j]] = [squares_list[j], squares_list[i]];
+    let squares_list = new Array();
+    let working_list = false;
+
+    while(working_list == false){
+        squares_list = generate_puzzle_sequence(rows,cols);
+        
+        //count the amount of inversions ( https://www.cs.bham.ac.uk/~mdr/teaching/modules04/java2/TilesSolvability.html )
+        let inversions = 0;
+        for(let i = 0; i < squares_list.length; i++){
+            for(let j = i; j < squares_list.length; j++){
+                if(squares_list[i] > squares_list[j] && squares_list[j] + squares_list[i] != 0)
+                    inversions++;
+            }
+        }
+
+        if((inversions % 2) == 0 ){
+            working_list = true;
+        }
     }
 
 
@@ -112,6 +121,23 @@ function generate_puzzle(rows, cols){
     return puzzle;
 }
 
+function generate_puzzle_sequence(rows, cols){
+    let squares = rows * cols;
+    let squares_list = new Array(squares);
+    //Initialize the list with all needed values
+    for(let i = 0; i < squares; i++){
+        squares_list[i] = i;
+    }
+
+    //Shuffling the array 
+    //source: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+    for(let i = squares - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [squares_list[i], squares_list[j]] = [squares_list[j], squares_list[i]];
+    }
+    return squares_list
+}
+
 
 function square_click_handler(cell){
     let col = cell.cellIndex;
@@ -121,19 +147,23 @@ function square_click_handler(cell){
         if(check_game_complete(my_puzzle)){
             clearInterval(timer);
             alert(`Proficiat, uw tijd: ${timer_html}.`);
-            start_game()
         }
     }
 }
 
 function update_time(time){
     let seconds = time;
-    hours = Math.floor(seconds / 3600);
+    hours = format_time_unit(Math.floor(seconds / 3600));
     seconds %= 3600;
-    minutes = Math.floor(seconds / 60);
-    seconds %= 60;
+    minutes = format_time_unit(Math.floor(seconds / 60));
+    seconds = format_time_unit(seconds % 60);
     my_time += 1;
     return `${hours}:${minutes}:${seconds}`;
+}
+function format_time_unit(time){
+    if(time < 10)
+        return "0"+String(time);
+    return String(time);
 }
 
 function solve(){
@@ -155,9 +185,10 @@ function change_puzzle_size(){
     let rows = document.getElementById("rows").value;
     let cols = document.getElementById("cols").value;
 
-    puzzle_rows_total = rows;
-    puzzle_cols_total = cols;
-    clearInterval(timer);
-    start_game();
+    if(rows >= 2 && cols >=2){
+        puzzle_rows_total = rows;
+        puzzle_cols_total = cols;
+        start_game();
+    }
 }
 

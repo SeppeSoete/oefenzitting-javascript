@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/fantasque-sans-mono" type="text/css"/>
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="utf-8" http-equiv="encoding">
         <script src="code.js"></script>
         <link rel="stylesheet" type="text/css" href="stylesheet.css"> 
     </head>
     <body>
-        <h1 class="text_container">Seppe's sliding puzzle</h1>
+        <h1>Seppe's sliding puzzle</h1>
         <div id="puzzle_container"></div>
         <div class="text_container" id="timer_container"></div>
         <div class="text_container" id="input">
              Amount of rows: <input type="text" id="rows"><br>
              Amount of columns: <input type="text" id="cols"><br>
+             <button onclick='start_game()'>Reset</button>
              <button onclick='change_puzzle_size()'>Submit</button>
         </div>
     </body>
